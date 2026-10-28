@@ -82,3 +82,6 @@
 .header nav{display:none;position:absolute;top:100%;left:0;right:0;background:var(--paper);z-index:5;border:1px solid var(--line);border-radius:5px;padding:20px;box-shadow:0 10px 20px #00000010}
 .header nav.open{display:flex;align-items:stretch;flex-direction:column;gap:20px}
 }
+
+.brand-logo{display:block;width:58px;height:58px;object-fit:contain;flex-shrink:0;margin-right:12px}
+@media(max-width:760px){.brand-logo{width:48px;height:48px;margin-right:9px}}

@@ -73,3 +73,12 @@
 .contact-call .arrow-icon{margin-left:14px}
 .contact h2 em{text-decoration:none;display:inline-block;position:relative;padding-bottom:9px}
 .contact h2 em::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:currentColor}
+
+.header nav{gap:22px}
+.header nav>a{white-space:nowrap}
+@media(max-width:1100px){
+.header{position:relative}
+.menu-toggle{display:block;border:1px solid #d5d6ce;border-radius:4px;background:transparent;font-size:22px;padding:3px 11px;color:var(--ink)}
+.header nav{display:none;position:absolute;top:100%;left:0;right:0;background:var(--paper);z-index:5;border:1px solid var(--line);border-radius:5px;padding:20px;box-shadow:0 10px 20px #00000010}
+.header nav.open{display:flex;align-items:stretch;flex-direction:column;gap:20px}
+}

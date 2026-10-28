@@ -13,7 +13,7 @@ toggle.addEventListener('click', () => {
 });
 navigation.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
 document.addEventListener('keydown', event => { if (event.key === 'Escape') { closeMenu(); toggle.focus(); } });
-window.matchMedia('(min-width: 761px)').addEventListener('change', closeMenu);
+window.matchMedia('(min-width: 1101px)').addEventListener('change', closeMenu);
 document.querySelector('#year').textContent = new Date().getFullYear();
 
 

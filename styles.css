@@ -36,3 +36,16 @@
 @media(max-width:760px){.actions{gap:20px}.hero .button{gap:15px;padding:17px 18px;font-size:12px}.hero .text-link{white-space:nowrap}.hero .text-link span{margin-left:5px}}
 
 .button.header-call{justify-content:center;gap:10px}.phone-icon{width:17px;height:17px;flex-shrink:0}
+
+.house-clearances{background:#f0ede7;border-top:1px solid #e3dfd6}
+.house-layout{display:grid;grid-template-columns:1.1fr 1fr;gap:85px;align-items:center}
+.house-intro h2{margin-bottom:25px;max-width:550px}
+.house-intro>p{font-size:14px;line-height:1.85;color:var(--muted);max-width:510px;margin-bottom:15px}
+.house-quote{margin-top:12px;gap:20px}
+.house-details article{display:flex;gap:20px;padding:26px 0;border-top:1px solid #d4cfc5}
+.house-details article:last-child{border-bottom:1px solid #d4cfc5}
+.house-details article>span{color:var(--red);font-size:10px;font-weight:700;white-space:nowrap;padding-top:5px}
+.house-details h3{font-size:18px;line-height:1.4;letter-spacing:-.4px;margin:0 0 8px}
+.house-details p{font-size:13px;line-height:1.8;color:var(--muted);margin:0}
+@media(max-width:1050px){.house-layout{gap:40px}.house-intro h2{font-size:35px}}
+@media(max-width:760px){.house-layout{grid-template-columns:1fr;gap:35px}.house-intro h2{font-size:33px}.house-quote{font-size:12px;padding:16px;gap:12px;max-width:100%}.house-details article{padding:22px 0;gap:15px}}

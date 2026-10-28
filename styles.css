@@ -68,3 +68,8 @@
 .review-card figcaption span{display:block;font-size:11px;color:var(--muted);margin-top:4px}
 @media(max-width:1050px){.review-grid{gap:14px}.review-card{padding:22px}.review-card blockquote p{font-size:14px}}
 @media(max-width:760px){.review-grid{grid-template-columns:1fr}.review-card{padding:25px}.review-card blockquote p{font-size:16px}}
+
+.contact .contact-call{gap:12px;justify-content:center}
+.contact-call .arrow-icon{margin-left:14px}
+.contact h2 em{text-decoration:none;display:inline-block;position:relative;padding-bottom:9px}
+.contact h2 em::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:currentColor}

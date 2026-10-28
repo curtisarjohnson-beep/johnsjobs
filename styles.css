@@ -25,3 +25,12 @@
 @keyframes road-pass{0%{transform:translateX(55px);opacity:0}25%{opacity:.55}80%{opacity:.55}100%{transform:translateX(-65px);opacity:0}}
 @media(max-width:760px){.art-controls{left:24px;right:24px}.art-controls .art-label{max-width:65%;font-size:6px}}
 @media(prefers-reduced-motion:reduce){.hero-art.is-driving .van,.hero-art.is-driving .van-body,.hero-art.is-driving .van-wheel,.hero-art.is-driving .speed-lines i{animation:none}.van-pause,.van-replay{display:none}.art-controls .art-label{font-size:0}.art-controls .art-label::after{content:"ILLUSTRATION · REAL JOB PHOTOS COMING SOON";font-size:7px}.van{cursor:default}}
+
+/* Keep longer service descriptions and coverage copy balanced across screen sizes. */
+.service{display:flex;flex-direction:column}
+.service-number{position:absolute;top:27px;right:27px}
+.service-link{margin-top:auto}
+.coverage .wrap{flex-wrap:wrap;gap:12px 24px}
+.coverage-extra{font-size:11px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.hero-notes{flex-wrap:wrap}
+@media(max-width:760px){.actions{gap:20px}.hero .button{gap:15px;padding:17px 18px;font-size:12px}.hero .text-link{white-space:nowrap}.hero .text-link span{margin-left:5px}}

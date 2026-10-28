@@ -52,5 +52,5 @@
 
 .charity-note{border-top:1px solid var(--line);margin-top:28px;padding-top:24px}
 .charity-note h3{display:flex;align-items:center;gap:10px;font-size:16px;line-height:1.5;margin:0 0 10px;letter-spacing:-.3px}
-.charity-icon{width:22px;height:22px;flex-shrink:0;color:var(--red)}
+.charity-icon{width:18px;height:18px;min-width:18px;flex-shrink:0;color:var(--red)}
 .charity-note p{font-size:13px;line-height:1.8;color:var(--muted);margin:0}

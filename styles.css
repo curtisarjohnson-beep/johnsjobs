@@ -91,7 +91,7 @@
 
 /* One shared timeline keeps collection, departure and the reveal in sync. */
 .hero-art .van{width:82%;left:17%;z-index:2}
-.clearance-items{position:absolute;left:3%;top:40%;width:32%;z-index:3;overflow:visible}
+.clearance-items{position:absolute;left:4%;top:45%;width:25%;z-index:3;overflow:visible}
 .clearance-boxes,.clearance-sofa{transform-box:fill-box;transform-origin:center}
 .scene-slogan{position:absolute;inset:30% 5% auto;text-align:center;opacity:0;pointer-events:none}
 .scene-slogan>span{display:block;font-size:9px;font-weight:700;letter-spacing:2px;margin-bottom:18px;color:#5a6553}

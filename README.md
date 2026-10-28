@@ -9,3 +9,5 @@ Contact buttons use the provided telephone numbers and email addresses. WhatsApp
 
 ## Before publication
 Confirm all copy and contact details with the business owner, replace placeholder artwork, check mobile and tablet layouts, and arrange production hosting with HTTPS and the domain. Nothing is automatically deployed by running this project.
+
+CSS and JavaScript links in index.html include content-version query strings to avoid stale browser caches. Update the corresponding version whenever editing these assets.

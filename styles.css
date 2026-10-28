@@ -54,3 +54,17 @@
 .charity-note h3{display:flex;align-items:center;gap:14px;font-size:16px;line-height:1.5;margin:0 0 10px;letter-spacing:-.3px}
 .charity-icon{width:18px;height:18px;min-width:18px;flex-shrink:0;color:var(--red)}
 .charity-note p{font-size:13px;line-height:1.8;color:var(--muted);margin:0}
+
+.reviews{background:#eeefe8;border-top:1px solid var(--line)}
+.reviews .section-heading>p{max-width:290px}
+.review-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.review-card{display:flex;flex-direction:column;margin:0;padding:28px;background:var(--paper);border:1px solid #dedfd8;border-radius:12px}
+.review-card time{font-size:11px;color:var(--muted)}
+.review-mark{font-family:Georgia,serif;font-size:60px;line-height:1;color:var(--red);height:45px;margin-top:20px}
+.review-card blockquote{margin:0 0 28px}
+.review-card blockquote p{font-size:16px;line-height:1.8;margin:0}
+.review-card figcaption{margin-top:auto;padding-top:20px;border-top:1px solid var(--line)}
+.review-card figcaption strong{display:block;font-size:14px}
+.review-card figcaption span{display:block;font-size:11px;color:var(--muted);margin-top:4px}
+@media(max-width:1050px){.review-grid{gap:14px}.review-card{padding:22px}.review-card blockquote p{font-size:14px}}
+@media(max-width:760px){.review-grid{grid-template-columns:1fr}.review-card{padding:25px}.review-card blockquote p{font-size:16px}}

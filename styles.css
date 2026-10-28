@@ -88,3 +88,33 @@
 
 .about-photo{border-radius:8px;overflow:hidden;background:#e8e5df;align-self:start}
 .about-photo img{display:block;width:100%;height:auto;aspect-ratio:3 / 2;object-fit:contain}
+
+/* One shared timeline keeps collection, departure and the reveal in sync. */
+.hero-art .van{width:82%;left:17%;z-index:2}
+.clearance-items{position:absolute;left:3%;top:40%;width:32%;z-index:3;overflow:visible}
+.clearance-boxes,.clearance-sofa{transform-box:fill-box;transform-origin:center}
+.scene-slogan{position:absolute;inset:30% 5% auto;text-align:center;opacity:0;pointer-events:none}
+.scene-slogan>span{display:block;font-size:9px;font-weight:700;letter-spacing:2px;margin-bottom:18px;color:#5a6553}
+.scene-slogan strong{font-family:Manrope,Arial,sans-serif;font-size:clamp(25px,2.6vw,38px);line-height:1.25;letter-spacing:-1.2px}
+.hero-art.is-driving .van{animation:clearance-drive 12s linear infinite}
+.hero-art.is-driving .van-body{animation:clearance-bounce 12s linear infinite}
+.hero-art.is-driving .van-wheel{animation:clearance-wheels 12s linear infinite}
+.hero-art.is-driving .clearance-boxes{animation:collect-boxes 12s ease-in-out infinite}
+.hero-art.is-driving .clearance-sofa{animation:collect-sofa 12s ease-in-out infinite}
+.hero-art.is-driving .scene-slogan{animation:reveal-slogan 12s ease-in-out infinite}
+.hero-art.is-driving .speed-lines i{animation:clearance-trails 12s linear infinite;animation-delay:0s!important}
+.hero-art.is-paused .van,.hero-art.is-paused .van-body,.hero-art.is-paused .van-wheel,.hero-art.is-paused .clearance-boxes,.hero-art.is-paused .clearance-sofa,.hero-art.is-paused .scene-slogan,.hero-art.is-paused .speed-lines i{animation-play-state:paused}
+@keyframes clearance-drive{0%{transform:translateX(-145%) rotate(-5deg)}18%,48%{transform:translateX(0) rotate(-5deg)}67%,100%{transform:translateX(145%) rotate(-5deg)}}
+@keyframes clearance-bounce{0%,8%,16%,48%,56%,64%,100%{transform:translateY(0)}4%,12%,52%,60%{transform:translateY(-3px)}20%,44%{transform:translateY(0)}}
+@keyframes clearance-wheels{0%{transform:rotate(0)}18%,48%{transform:rotate(720deg)}67%,100%{transform:rotate(1620deg)}}
+@keyframes collect-boxes{0%,25%{opacity:1;transform:translate(0,0) scale(1)}35%,94%{opacity:0;transform:translate(95px,-20px) scale(.35)}95%,100%{opacity:0;transform:translate(0,0) scale(1)}}
+@keyframes collect-sofa{0%,35%{opacity:1;transform:translate(0,0) scale(1)}47%,94%{opacity:0;transform:translate(100px,-25px) scale(.35)}95%,100%{opacity:0;transform:translate(0,0) scale(1)}}
+@keyframes reveal-slogan{0%,65%{opacity:0;transform:translateY(12px)}73%,92%{opacity:1;transform:translateY(0)}99%,100%{opacity:0;transform:translateY(-8px)}}
+@keyframes clearance-trails{0%,18%,47%,67%,100%{opacity:0;transform:translateX(0)}6%,13%,53%,61%{opacity:.5;transform:translateX(-25px)}}
+@media(max-width:760px){.scene-slogan strong{font-size:clamp(25px,5.5vw,38px)}}
+@media(prefers-reduced-motion:reduce){
+.hero-art.is-driving .van,.hero-art.is-driving .van-body,.hero-art.is-driving .van-wheel,.hero-art.is-driving .clearance-boxes,.hero-art.is-driving .clearance-sofa,.hero-art.is-driving .scene-slogan,.hero-art.is-driving .speed-lines i{animation:none}
+.hero-art .van,.clearance-items,.speed-lines{display:none}
+.scene-slogan{opacity:1;transform:none}
+.art-controls .art-label::after{content:"ILLUSTRATION · SPACE CLEARED. JOB DONE."}
+}

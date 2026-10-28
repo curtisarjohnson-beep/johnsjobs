@@ -8,7 +8,7 @@ http.createServer(async (req,res) => {
   try {
     const url = new URL(req.url, 'http://localhost');
     const name = url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname).slice(1);
-    if (!['index.html','styles.css','app.js','Retro Dotted Two-Tone J Emblem.png'].includes(name)) { res.writeHead(404); res.end('Not found'); return; }
+    if (!['index.html','styles.css','app.js','Retro Dotted Two-Tone J Emblem.png','JohnsJobs Team by the Service Van.png'].includes(name)) { res.writeHead(404); res.end('Not found'); return; }
     const data = await readFile(path.join(root,name));
     res.writeHead(200,{'Content-Type':types[path.extname(name)],'X-Content-Type-Options':'nosniff'}); res.end(data);
   } catch { res.writeHead(500); res.end('Unable to load page'); }

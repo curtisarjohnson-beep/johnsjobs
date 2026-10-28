@@ -85,3 +85,6 @@
 
 .brand-logo{display:block;width:58px;height:58px;object-fit:contain;flex-shrink:0;margin-right:12px}
 @media(max-width:760px){.brand-logo{width:48px;height:48px;margin-right:9px}}
+
+.about-photo{border-radius:8px;overflow:hidden;background:#e8e5df;align-self:start}
+.about-photo img{display:block;width:100%;height:auto;aspect-ratio:3 / 2;object-fit:contain}

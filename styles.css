@@ -145,3 +145,13 @@
 @media(max-width:1050px){.contact-inner{gap:35px;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)}.enquiry-card{padding:24px}.contact h2{font-size:43px}.contact-call{font-size:12px;padding:16px}}
 @media(max-width:760px){.contact-inner{grid-template-columns:1fr;gap:35px}.enquiry-card{padding:24px 20px}.enquiry-card{scroll-margin-top:20px}}
 @media(max-width:480px){.form-fields{grid-template-columns:1fr}.enquiry-card>h3{font-size:23px}}
+
+.photo-field .optional-label{color:var(--muted);font-weight:400}
+.contact .enquiry-card .photo-help,.contact .enquiry-card .photo-status{font-size:12px;line-height:1.7;color:var(--muted);margin:8px 0}
+.photo-field input[type="file"]{font-size:13px;overflow:hidden;padding:10px}
+.photo-field input::file-selector-button{background:var(--ink);color:white;border:0;border-radius:4px;padding:9px 12px;margin-right:10px;cursor:pointer}
+.photo-previews{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:10px}
+.photo-previews li{display:flex;align-items:center;gap:12px;padding:10px;background:#eeefe8;border-radius:6px;min-width:0}
+.photo-previews img{width:58px;height:58px;object-fit:cover;border-radius:4px;flex-shrink:0}
+.photo-previews span{font-size:11px;overflow-wrap:anywhere;flex:1;min-width:0}
+.photo-previews button{font:inherit;font-size:11px;border:0;border-bottom:1px solid currentColor;color:#b9131b;background:transparent;cursor:pointer;padding:4px 0}

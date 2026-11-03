@@ -1,6 +1,8 @@
 # JohnsJobs
 Responsive website for a Luton waste clearance business. Plain HTML, CSS and JavaScript with a small Node static server; no installation or build step required.
 
+Pages Link - https://curtisarjohnson-beep.github.io/johnsjobs/
+
 ## Development
 Use Node 24 or a current supported Node LTS. From this directory run `npm run dev`. The server listens on port 3000 (override with `PORT`). Run `npm run check` for JavaScript syntax checks.
 

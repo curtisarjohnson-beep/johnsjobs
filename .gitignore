@@ -1,2 +1,5 @@
 node_modules/
 *.log
+
+# Generated email previews belong outside the published site.
+/email-preview.html

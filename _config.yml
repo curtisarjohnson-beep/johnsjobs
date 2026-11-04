@@ -7,3 +7,4 @@ exclude:
   - server.js
   - package.json
   - README.md
+  - email-preview.html

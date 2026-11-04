@@ -34,3 +34,6 @@ Photos are optional and prepared locally; nothing is uploaded by this static web
 The public `privacy.html` page is a clearly marked draft, with unknown controller details, lawful bases, retention periods and provider/transfer arrangements left for confirmation. It is linked from the footer and enquiry form. It is not legal approval.
 
 See [cookie and tracking audit](docs/COOKIE-AUDIT.md) for current source findings and remaining deployed-provider checks, and [backend integration contract](docs/ENQUIRY-INTEGRATION.md) for the proposed PHP/Workers interface, attachment budgets, Resend sender/recipient requirements and activation checklist. No backend has been connected. External Google Fonts remain to preserve typography; no cookie banner has been introduced.
+
+## Enquiry email template
+Server-side presentation lives in `_email/render-enquiry.js`. Run `npm test` for rendering/security tests and `npm run email:preview` for fictional HTML/plain-text samples written outside the website to `/tmp/johnsjobs-email-preview/`. See [email template instructions](docs/EMAIL-TEMPLATE.md) for configuration, the PHP/Workers adaptation and future delivery sequence. No emails are sent, and the form remains disabled. `_dev` fixtures and `_email` modules are excluded from Pages and the local website server; preserve those exclusions on future hosting.

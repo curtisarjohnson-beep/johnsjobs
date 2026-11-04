@@ -1,0 +1,9 @@
+# Keep server-side email presentation, fixtures and tooling out of GitHub Pages.
+# Preserve this exclusion in any future build; do not serve these as public routes.
+exclude:
+  - _email
+  - _dev
+  - docs
+  - server.js
+  - package.json
+  - README.md

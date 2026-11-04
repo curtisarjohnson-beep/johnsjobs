@@ -63,3 +63,7 @@ Change `method="dialog"` deliberately when activation is tested; the current val
 ## Decisions still needed
 
 Controller identity/address and lawful bases; retention/deletion schedule; final privacy approval by the business; host/PHP versus Workers; request limits; endpoint/origin; sender-domain verification; Resend/mailbox contracts, processing locations and safeguards; credential management; spam/rate strategy; delivery/bounce monitoring and duplicate policy. See `COOKIE-AUDIT.md` and the public draft privacy page. Do not enable delivery merely because frontend tests pass.
+
+## Presentation module available
+
+Use `_email/render-enquiry.js` after validation to generate the subject, HTML and plain-text bodies; see `EMAIL-TEMPLATE.md`. It accepts the form's text values plus metadata derived from the accepted attachments, and returns configurable envelope fields with customer Reply-To. File bytes are never embedded in the HTML and must be attached independently. This module is presentation only, not an API endpoint or live Resend integration.

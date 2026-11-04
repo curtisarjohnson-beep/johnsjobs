@@ -1,0 +1,4 @@
+# Demo: allow crawling so search engines can read the pages' noindex directives.
+# Do not submit this demo to Search Console or advertise a demo sitemap.
+User-agent: *
+Disallow:

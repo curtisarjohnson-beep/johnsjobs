@@ -37,3 +37,6 @@ See [cookie and tracking audit](docs/COOKIE-AUDIT.md) for current source finding
 
 ## Enquiry email template
 Server-side presentation lives in `_email/render-enquiry.js`. Run `npm test` for rendering/security tests and `npm run email:preview` for fictional HTML/plain-text samples written outside the website to `/tmp/johnsjobs-email-preview/`. See [email template instructions](docs/EMAIL-TEMPLATE.md) for configuration, the PHP/Workers adaptation and future delivery sequence. No emails are sent, and the form remains disabled. `_dev` fixtures and `_email` modules are excluded from Pages and the local website server; preserve those exclusions on future hosting.
+
+## Technical SEO and launch settings
+The GitHub Pages demo remains publicly viewable with page-level `noindex,follow`; do not submit it for indexing. See [technical SEO and migration notes](docs/TECHNICAL-SEO.md). The separate `npm run seo:production -- https://johnsjobs.uk /tmp/johnsjobs-production` command prepares production-only canonicals, indexing and sitemap into an empty directory outside this checkout. It does not deploy or enable enquiries. Run it only for an approved production launch after choosing the canonical hostname. Optimized WebP assets preserve the existing layout and copy; originals remain in Git for future editing.

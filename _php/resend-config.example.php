@@ -1,5 +1,5 @@
 <?php
-// Copy ONLY to /home/johnsjobs/resend-config.php, never into public_html or Git.
+// Copy ONLY to /home/johnsjobs/private/resend-config.php, never into public_html or Git.
 declare(strict_types=1);
 return [
     'enabled' => false, // Set true only for an authorised production delivery test.

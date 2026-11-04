@@ -17,7 +17,7 @@ CSS and JavaScript links in index.html include content-version query strings to 
 ## Enquiry form and PHP backend
 The six-field form, optional photo picker and existing quote preselection remain in the same design. The GitHub Pages source stays disabled and never probes the PHP endpoint. Production code uses a same-origin readiness request, then signed-token multipart submissions, accessible loading/errors, retained data and acceptance-only success. Direct phone/email links remain available.
 
-`npm run deploy:prepare -- https://johnsjobs.uk /tmp/johnsjobs-deployment` assembles a separate tree for the confirmed PHP 8.3 host. It does not deploy or send email. The config example defaults to disabled, and the real config/key must live at `/home/johnsjobs/resend-config.php`, outside public_html. See [Maciek's deployment guide](docs/PHP-DEPLOYMENT.md) for every file, permissions, limits and authorised test steps.
+`npm run deploy:prepare -- https://johnsjobs.uk /tmp/johnsjobs-deployment` assembles a separate tree for the confirmed PHP 8.3 host. It does not deploy or send email. The config example defaults to disabled, and the real config/key must live at `/home/johnsjobs/private/resend-config.php`, outside public_html. See [Maciek's deployment guide](docs/PHP-DEPLOYMENT.md) for every file, permissions, limits and authorised test steps.
 
 Optional photos: at most five JPEG/PNG/WebP originals, 5 MB each, compressed locally to <=1 MB each / <=5 MB total. PHP independently checks count, actual upload/type/structure/dimensions and byte budgets, and sends them only as attachments. No public image storage, database, Composer dependency or PHP shell execution is used.
 
@@ -33,3 +33,7 @@ Server-side presentation lives in `_email/render-enquiry.js`. Run `npm test` for
 
 ## Technical SEO and launch settings
 The GitHub Pages demo remains publicly viewable with page-level `noindex,follow`; do not submit it for indexing. See [technical SEO and migration notes](docs/TECHNICAL-SEO.md). The separate `npm run seo:production -- https://johnsjobs.uk /tmp/johnsjobs-production` command prepares production-only canonicals, indexing and sitemap into an empty directory outside this checkout. It does not deploy or enable enquiries. Run it only for an approved production launch after choosing the canonical hostname. Optimized WebP assets preserve the existing layout and copy; originals remain in Git for future editing.
+
+
+## Final FileZilla package
+The two FTP roots are public_html and `/home/johnsjobs/private`. Download `_deployment/johnsjobs-production.zip` and follow [the FileZilla checklist](docs/FILEZILLA-DEPLOYMENT.md). The endpoint loads `/home/johnsjobs/private/resend-config.php`; the private account also receives backend code and the writable state directory. No server-managed .htaccess/web.config/.well-known/.user.ini files are overwritten by the package.

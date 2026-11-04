@@ -20,6 +20,6 @@ The frontend remains disabled without production opt-in AND readiness. It disabl
 
 ## Email and secret boundary
 
-Private PHP renderer `_php/private/renderer.php` ports the approved `_email/render-enquiry.js` table-based HTML/plain-text design. Customer text/filenames are escaped and description line breaks preserved. Accepted photo bytes are base64 attachments with generated safe filenames; the template displays original names where valid. The backend uses fixed From `JohnsJobs Enquiries <enquiries@johnsjobs.uk>` and To `john@johnsjobs.uk`; Reply-To is the validated customer's email. The secret key lives only in `/home/johnsjobs/resend-config.php`. No key, transport URL or recipient is accepted from the browser.
+Private PHP renderer `_php/private/renderer.php` ports the approved `_email/render-enquiry.js` table-based HTML/plain-text design. Customer text/filenames are escaped and description line breaks preserved. Accepted photo bytes are base64 attachments with generated safe filenames; the template displays original names where valid. The backend uses fixed From `JohnsJobs Enquiries <enquiries@johnsjobs.uk>` and To `john@johnsjobs.uk`; Reply-To is the validated customer's email. The secret key lives only in `/home/johnsjobs/private/resend-config.php`. No key, transport URL or recipient is accepted from the browser.
 
 No live delivery has been performed. Production credentials, verified sender, private-file deployment, final privacy/provider confirmations and an authorised actual-host end-to-end delivery test remain outstanding.

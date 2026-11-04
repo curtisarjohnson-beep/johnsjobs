@@ -8,7 +8,7 @@ header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 header('X-Content-Type-Options: nosniff');
 header('X-Robots-Tag: noindex');
-$privateRoot=dirname(__DIR__,2);
+$privateRoot=dirname(__DIR__,2).'/private';
 try {
     $configFile=$privateRoot.'/resend-config.php';
     $library=$privateRoot.'/johnsjobs-backend/enquiry.php';

@@ -7,10 +7,10 @@ Prepared 4 November 2026. Code is implemented and locally tested with mocked del
 PHP 8.3 uses cURL, OpenSSL, JSON, fileinfo, built-in image metadata parsing and hash functions; no Composer package, database, shell execution, GD or image-processing service is required. PHP never calls exec/system/shell_exec. PHP handles temporary uploads and the endpoint removes verified temporary upload files in a finally block; PHP also cleans them at request end. Nothing is moved into public storage.
 
 - Public endpoint: `/home/johnsjobs/public_html/api/enquiry.php`.
-- Private config: `/home/johnsjobs/resend-config.php`.
-- Private library: `/home/johnsjobs/johnsjobs-backend/{enquiry.php,renderer.php}`.
-- Private writable state directory: `/home/johnsjobs/johnsjobs-state/`.
-- `dirname(__DIR__, 2)` from the installed endpoint resolves to `/home/johnsjobs`, so both config and library are outside public_html. Moving the endpoint into a differently nested folder requires reviewing this path.
+- Private config: `/home/johnsjobs/private/resend-config.php`.
+- Private library: `/home/johnsjobs/private/johnsjobs-backend/{enquiry.php,renderer.php}`.
+- Private writable state directory: `/home/johnsjobs/private/johnsjobs-state/`.
+- `dirname(__DIR__, 2) . "/private"` from the installed endpoint resolves to `/home/johnsjobs/private`, so both config and library are outside public_html. Moving the endpoint into a differently nested folder requires reviewing this path.
 
 Maciek must confirm that PHP runs as the correct hosting account and can read the private files/write the state directory; that the web server passes HTTPS=on or SERVER_PORT=443 for actual TLS requests; and that cURL can reach `https://api.resend.com/emails` with valid CA trust. Forwarded IP/protocol headers are deliberately not trusted. If TLS or a proxy terminates upstream, configure the verified web-server/SAPI settings, not a client-controlled X-Forwarded header bypass.
 
@@ -24,38 +24,33 @@ Use the confirmed apex or www hostname. Output must be a new empty directory out
 
 ```
 public_html/
-  index.html
-  privacy.html
-  styles.css
-  app.js
-  robots.txt
-  sitemap.xml
-  .user.ini
-  assets/logo-116.webp
-  assets/logo-232.webp
-  assets/team-768.webp
-  assets/team-1024.webp
-  assets/team-1536.webp
+  index.html, privacy.html, styles.css, app.js, robots.txt, sitemap.xml
+  assets/ (five WebP assets)
   api/enquiry.php
-johnsjobs-backend/
-  enquiry.php
-  renderer.php
-resend-config.example.php
+private/
+  resend-config.php (placeholders, disabled)
+  johnsjobs-backend/enquiry.php
+  johnsjobs-backend/renderer.php
+  johnsjobs-state/ (empty writable directory)
+hosting/
+  php-settings.user.ini.example (reference only)
 ```
 
-Upload exactly the contents of `public_html/` into `/home/johnsjobs/public_html/`, preserving paths. Upload `johnsjobs-backend/` to `/home/johnsjobs/johnsjobs-backend/`, **never beneath public_html**. The placeholder example is for reference outside the public directory, not a live configuration. Do not upload `_dev`, `_email`, `_php`, tests, docs, sample emails, source originals, Node server, Git files or credentials into public_html. Back up the old site and confirm the SEO migration/redirect checklist before replacing it.
+Follow [the FileZilla checklist](FILEZILLA-DEPLOYMENT.md): upload public_html **contents** through the website FTP account and private **contents** through the configuration FTP account. Those accounts already open at their respective roots. Preserve any existing real private config/state and hosting-managed public files. Never upload the private directory through the website FTP account. The config example is reference data only, not a live key.
 
-The production page opts into `./api/enquiry.php`; the GitHub Pages source does not. The submit button initially stays disabled on both: production JavaScript enables it only after a successful readiness GET and token-age delay. If config/PHP is absent, it remains unavailable with phone/email alternatives. Native form submission remains disabled even without JavaScript. Operational coming-soon messaging is hidden only once the backend reports readiness. Marketing copy, form layout and imagery remain unchanged.
+Preserve `.htaccess`, `web.config`, `.well-known`, `.user.ini`, php.ini and verification files. Maciek must review legacy rewrites/default index precedence; do not overwrite these with this bundle. The PHP settings reference now sits outside public_html to prevent accidental replacement of existing settings.
+
+The production page opts into `./api/enquiry.php`; the GitHub Pages source does not. The submit button initially stays disabled and production JavaScript enables it only after successful readiness. If config/PHP is unavailable, phone/email alternatives remain. No credentials, actual hosting upload or live delivery is included in preparation.
 
 ## Private configuration
 
-Using Maciek's secure hosting editor or SFTP, create `/home/johnsjobs/resend-config.php` from `_php/resend-config.example.php`. Enter the real key there only. Set:
+Using Maciek's secure hosting editor or SFTP, create `/home/johnsjobs/private/resend-config.php` from `_php/resend-config.example.php`. Enter the real key there only. Set:
 
 - `enabled` to `false` initially.
 - `api_key` to a least-privilege Resend sending key for the verified johnsjobs.uk domain.
 - `token_secret` to at least 64 cryptographically random hexadecimal characters. Maciek may generate this privately using a password manager or `php -r 'echo bin2hex(random_bytes(32)), PHP_EOL;'` if PHP CLI is available. Do not expose a public secret-generator page or paste secrets into chat.
 - `allowed_origin` to exactly `https://johnsjobs.uk` or `https://www.johnsjobs.uk`, matching the canonical site, without a trailing slash.
-- `state_dir` to `/home/johnsjobs/johnsjobs-state`.
+- `state_dir` to `/home/johnsjobs/private/johnsjobs-state`.
 
 Create the private state directory, owner-writable by PHP, ideally mode 0700. Use restrictive config/library/file permissions (config/state files 0600 where the hosting model permits) and the correct owner; do not use 0777. The endpoint uses umask 0077 and discards accidental output from the private config before returning JSON. Ensure the private files cannot be requested over HTTP and do not enter hosting public backups/downloads.
 
@@ -63,7 +58,7 @@ Do not change the hardcoded sender/recipient using request fields: sender is `Jo
 
 ## Upload and size settings
 
-The supplied `.user.ini` requests `upload_max_filesize=5M`, `post_max_size=8M`, `max_file_uploads=6`, `memory_limit=128M`, `max_input_vars=50`, `max_execution_time=30`, `display_errors=Off`. Maciek must confirm effective settings (CGI/FPM may cache .user.ini; other SAPIs may require control-panel settings). Six uploads are allowed through PHP parsing so the endpoint can reject a sixth rather than silently truncate it to five. Block direct `.user.ini` downloads through the hosting server and remove any diagnostic phpinfo page after checking settings.
+The separate `hosting/php-settings.user.ini.example` reference suggests `upload_max_filesize=5M`, `post_max_size=8M`, `max_file_uploads=6`, `memory_limit=128M`, `max_input_vars=50`, `max_execution_time=30`, `display_errors=Off`. Maciek must confirm effective settings (CGI/FPM may cache .user.ini; other SAPIs may require control-panel settings). Six uploads are allowed through PHP parsing so the endpoint can reject a sixth rather than silently truncate it to five. Block direct `.user.ini` downloads through the hosting server and remove any diagnostic phpinfo page after checking settings.
 
 Application budgets use decimal bytes: <=5,000,000 per file, <=5 files, <=5,000,000 total raw attachments, <=6,000,000 HTTP Content-Length, <=8,000,000 serialized Resend JSON bytes. The existing browser preparation still targets JPEG <=1 MB each / <=5 MB overall, 1600px longest edge. Untrusted clients cannot bypass the server total/file/count limits. PHP upload limits are a second layer, not a substitute for the application checks.
 

@@ -13,8 +13,12 @@ if((await readdir(output)).length)throw new Error('Deployment output must be emp
 execFileSync(process.execPath,[path.join(root,'_dev/prepare-production.js'),origin,path.join(output,'public_html'),'--enable-enquiries'],{stdio:'inherit'});
 await mkdir(path.join(output,'public_html/api'));
 await copyFile(path.join(root,'_php/public/enquiry.php'),path.join(output,'public_html/api/enquiry.php'));
-await copyFile(path.join(root,'_php/public/.user.ini'),path.join(output,'public_html/.user.ini'));
-await mkdir(path.join(output,'johnsjobs-backend'));
-for(const file of ['enquiry.php','renderer.php'])await copyFile(path.join(root,'_php/private',file),path.join(output,'johnsjobs-backend',file));
-await copyFile(path.join(root,'_php/resend-config.example.php'),path.join(output,'resend-config.example.php'));
+await mkdir(path.join(output,'hosting'));
+await copyFile(path.join(root,'_php/public/.user.ini'),path.join(output,'hosting/php-settings.user.ini.example'));
+await mkdir(path.join(output,'private/johnsjobs-backend'),{recursive:true});
+await mkdir(path.join(output,'private/johnsjobs-state'),{mode:0o700});
+for(const file of ['enquiry.php','renderer.php'])await copyFile(path.join(root,'_php/private',file),path.join(output,'private/johnsjobs-backend',file));
+await copyFile(path.join(root,'_php/resend-config.example.php'),path.join(output,'private/resend-config.php'));
+await copyFile(path.join(root,'docs/FILEZILLA-DEPLOYMENT.md'),path.join(output,'START-HERE.md'));
+for(const name of ['PHP-DEPLOYMENT.md','PHP-QA.md'])await copyFile(path.join(root,'docs',name),path.join(output,name));
 console.log('PHP deployment bundle prepared. No real config/key included; endpoint stays unavailable until privately configured and enabled. NOT deployed.');

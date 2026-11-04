@@ -10,12 +10,12 @@ test('PHP bundle separates public endpoint from private code/config and opts in 
  try{
   execFileSync(process.execPath,[new URL('_dev/prepare-php-deployment.js',root).pathname,'https://johnsjobs.uk',temp]);
   const publicFiles=await readdir(path.join(temp,'public_html'));
-  assert.ok(publicFiles.includes('api'));assert.ok(!publicFiles.includes('resend-config.php'));assert.ok(!publicFiles.includes('johnsjobs-backend'));
+  assert.ok(publicFiles.includes('api'));assert.ok(!publicFiles.includes('.user.ini'));assert.ok(!publicFiles.includes('.htaccess'));assert.ok(!publicFiles.includes('web.config'));assert.ok(!publicFiles.includes('.well-known'));assert.ok(!publicFiles.includes('resend-config.php'));assert.ok(!publicFiles.includes('johnsjobs-backend'));
   const html=await readFile(path.join(temp,'public_html/index.html'),'utf8');assert.match(html,/data-endpoint="\.\/api\/enquiry.php"/);assert.match(html,/type="submit" disabled/);assert.match(html,/method="dialog"/);
-  const endpoint=await readFile(path.join(temp,'public_html/api/enquiry.php'),'utf8');assert.match(endpoint,/dirname\(__DIR__,2\)/);assert.match(endpoint,/resend-config\.php/);
-  assert.match(await readFile(path.join(temp,'resend-config.example.php'),'utf8'),/'enabled' => false/);
+  const endpoint=await readFile(path.join(temp,'public_html/api/enquiry.php'),'utf8');assert.match(endpoint,/dirname\(__DIR__,2\)\.'\/private'/);assert.match(endpoint,/resend-config\.php/);
+  assert.match(await readFile(path.join(temp,'private/resend-config.php'),'utf8'),/'enabled' => false/);
   assert.doesNotMatch(await readFile(new URL('index.html',root),'utf8'),/data-endpoint=/);
-  assert.ok((await readdir(path.join(temp,'johnsjobs-backend'))).includes('renderer.php'));
+  assert.ok((await readdir(path.join(temp,'private/johnsjobs-backend'))).includes('renderer.php'));
  }finally{await rm(temp,{recursive:true,force:true});}
 });
 

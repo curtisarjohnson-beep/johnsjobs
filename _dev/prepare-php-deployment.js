@@ -1,0 +1,20 @@
+// Offline assembly only. No credentials, upload, DNS changes or API calls.
+import {mkdir, readdir, copyFile} from 'node:fs/promises';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {execFileSync} from 'node:child_process';
+const root=path.resolve(fileURLToPath(new URL('..',import.meta.url)));
+const [origin,outputArg,...extra]=process.argv.slice(2);
+if(!origin||!outputArg||extra.length)throw new Error('Usage: npm run deploy:prepare -- https://johnsjobs.uk /tmp/johnsjobs-deployment');
+const output=path.resolve(outputArg);
+if(output===root||output.startsWith(root+path.sep))throw new Error('Use an empty directory outside this checkout.');
+await mkdir(output,{recursive:true});
+if((await readdir(output)).length)throw new Error('Deployment output must be empty.');
+execFileSync(process.execPath,[path.join(root,'_dev/prepare-production.js'),origin,path.join(output,'public_html'),'--enable-enquiries'],{stdio:'inherit'});
+await mkdir(path.join(output,'public_html/api'));
+await copyFile(path.join(root,'_php/public/enquiry.php'),path.join(output,'public_html/api/enquiry.php'));
+await copyFile(path.join(root,'_php/public/.user.ini'),path.join(output,'public_html/.user.ini'));
+await mkdir(path.join(output,'johnsjobs-backend'));
+for(const file of ['enquiry.php','renderer.php'])await copyFile(path.join(root,'_php/private',file),path.join(output,'johnsjobs-backend',file));
+await copyFile(path.join(root,'_php/resend-config.example.php'),path.join(output,'resend-config.example.php'));
+console.log('PHP deployment bundle prepared. No real config/key included; endpoint stays unavailable until privately configured and enabled. NOT deployed.');

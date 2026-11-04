@@ -175,3 +175,5 @@
 .footer-links{align-items:center}.footer-socials{display:inline-flex;gap:8px;align-items:center}.footer-socials a{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid var(--line);border-radius:50%;color:var(--ink)}.footer-socials a:hover{color:var(--red);border-color:var(--red)}.footer-socials svg{flex-shrink:0}
 
 .google-profile-link{text-align:center;margin:28px 0 0}
+
+.enquiry-trap{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;pointer-events:none}

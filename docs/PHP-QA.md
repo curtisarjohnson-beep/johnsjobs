@@ -1,0 +1,15 @@
+# PHP integration QA — 4 November 2026
+
+Local evidence only. No production credentials, live API/email send or actual-host deployment was used.
+
+- Node syntax checks passed for the frontend and build/preview scripts.
+- 13 Node tests passed: existing email escaping/configuration/attachment cases, demo noindex safeguards, production SEO packaging, PHP deployment public/private separation, demo opt-in isolation and cross-language category parity.
+- PHP 8.3.36 lint passed for endpoint, private service/renderer, placeholder config and tests using the official image listed in `PHP-DEPLOYMENT.md`.
+- 43 PHP assertions passed with a mock transport in a container with `--network none`: config-off behaviour, methods, HTTPS/origin checks, request cap/content type, signed tokens/expiry/minimum age, honeypot, required/format/header validation, fixed sender/recipient despite malicious overrides, escaped rendering, accepted-only success, failures/exceptions, replay/pending/idempotency handling, per-IP/global rate limits, real JPEG/PNG/WebP checks, sixth/oversized/partial/corrupt uploads, aggregate bounds, attachment encoding and private state without raw customer fields/IPs.
+- An additional public-wrapper test passed (44 PHP checks total): a malformed private config containing plain text was buffered and never echoed to the client; the endpoint returned safe 503 JSON. The unconfigured public wrapper also returned unavailable JSON without PHP paths or secrets.
+- A fictional fixture's PHP HTML, plain text and subject matched the approved JS renderer byte-for-byte after escaping normalisation. No email template design change was introduced.
+- Browser tests with intercepted/mock same-origin API responses passed: demo makes no enquiry requests; unavailable backend stays disabled; production readiness gate; multipart prepared photos and signed-token/honeypot fields; loading controls and duplicate blocking; server errors/failure and retained data/photos; rejection of false success responses; accepted-only confirmation; direct telephone/email links and no overflow at 320/390/768/1440px.
+- The source homepage copy/section layout and animations were not redesigned. A visually hidden honeypot and operational submission states were added. GitHub Pages retains the disabled visual-review form.
+- `git diff --check` passed. No real configuration file or key is part of the source/bundle.
+
+Outstanding: actual hosting permissions/effective PHP limits, HTTPS/proxy configuration, sender verification, private key and random signing secret, final privacy/provider/retention confirmations, authorised actual-domain end-to-end testing (including receipt/bounces, temporary file cleanup, errors and duplicate retries). Browser tests mocked the API and PHP unit tests injected the transport/file verifier; they are not a substitute for an actual SAPI upload/cURL/inbox test on Maciek's host. Recheck current provider/account limits before activation.

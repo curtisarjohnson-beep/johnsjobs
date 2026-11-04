@@ -49,3 +49,6 @@ After approval, consider evidence-based service/location pages, links from the G
 ## Validation
 
 Node syntax checks and 11 automated email/SEO tests pass, including demo protection, schema constraints, production artifact generation and output safeguards. Browser checks at 320, 390, 768, 1024 and 1440px compared both pages' heading positions and dimensions with the pre-change versions (within 1px), loaded optimized images, checked no overflow, internal section links, demo noindex and disabled submission. External fonts were blocked for deterministic layout comparisons; production font/network performance still requires testing. No browser JavaScript exceptions occurred. No email delivery or live production changes were performed.
+
+## Confirmed PHP host update
+The separate `deploy:prepare` command now assembles the confirmed PHP integration alongside production SEO artifacts; see `PHP-DEPLOYMENT.md`. The default SEO preparation command and GitHub Pages demo still do not opt into enquiries. No production DNS/site deployment has been made.

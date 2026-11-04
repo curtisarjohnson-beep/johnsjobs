@@ -6,9 +6,11 @@
   "scripts": {
     "dev": "node server.js",
     "start": "node server.js",
-    "check": "node --check server.js && node --check app.js && node --check _email/render-enquiry.js && node --check _dev/preview-email.js && node --check _dev/prepare-production.js",
+    "check": "node --check server.js && node --check app.js && node --check _email/render-enquiry.js && node --check _dev/preview-email.js && node --check _dev/prepare-production.js && node --check _dev/prepare-php-deployment.js",
     "test": "node --test _dev/*.test.js",
     "email:preview": "node _dev/preview-email.js",
-    "seo:production": "node _dev/prepare-production.js"
+    "seo:production": "node _dev/prepare-production.js",
+    "deploy:prepare": "node _dev/prepare-php-deployment.js",
+    "test:php": "php _php/tests/enquiry.test.php && php _php/tests/wrapper.test.php"
   }
 }

@@ -42,9 +42,9 @@ reducedMotion.addEventListener('change', () => {
 });
 replayVan();
 
-// Enquiry frontend only. No endpoint, persistence or email provider is configured.
+// Demo stays disabled. Only production builds opt into same-origin PHP readiness.
 const quoteForm = document.querySelector('#quote-form');
-const enquiryFields = [...quoteForm.querySelectorAll('input:not([type="file"]), select, textarea')];
+const enquiryFields = [...quoteForm.querySelectorAll('input:not([type="file"]):not([name="website"]), select, textarea')];
 const enquiryStatus = document.querySelector('#enquiry-status');
 function validateEnquiryField(field) {
   const value = field.value.trim();
@@ -76,13 +76,104 @@ function validateEnquiry() {
 function collectEnquiryData() {
   return { ...Object.fromEntries(enquiryFields.map(field => [field.name, field.value.trim()])), photos: selectedPhotos.map(photo => photo.file) };
 }
-// Future integration boundary: pass collectEnquiryData() to a tested backend here.
-// Keep disabled until server validation, spam protection and real responses exist.
-function handleEnquirySubmission(event) {
+let backendReady = false;
+let sendingEnquiry = false;
+let enquiryAccepted = false;
+let deliveryUncertain = false;
+let enquiryBlocked = false;
+let formToken = '';
+let enquiryEndpoint = null;
+const submitEnquiryButton = quoteForm.querySelector('.form-submit');
+function updateSubmitState() {
+  submitEnquiryButton.disabled = !backendReady || sendingEnquiry || enquiryAccepted || enquiryBlocked || photosProcessing;
+}
+function showEnquiryStatus(message, isError = false) {
+  enquiryStatus.replaceChildren(document.createTextNode(message + ' '));
+  const call = document.createElement('a'); call.href = 'tel:07772591409'; call.textContent = 'Call John';
+  const email = document.createElement('a'); email.href = 'mailto:john@johnsjobs.uk'; email.textContent = 'email John';
+  enquiryStatus.append(call, document.createTextNode(' or '), email, document.createTextNode('.'));
+  enquiryStatus.setAttribute('role', isError ? 'alert' : 'status');
+}
+async function prepareEnquiryBackend() {
+  // Never probe an endpoint from the GitHub Pages demo, even after filling the form.
+  if (!quoteForm.dataset.endpoint) return;
+  try {
+    const endpoint = new URL(quoteForm.dataset.endpoint, location.href);
+    if (endpoint.origin !== location.origin || endpoint.protocol !== 'https:') return;
+    const response = await fetch(endpoint, {credentials:'omit', cache:'no-store', redirect:'error', signal:AbortSignal.timeout(10000)});
+    const result = await response.json();
+    if (!response.ok || result.enabled !== true || typeof result.token !== 'string') throw new Error('unavailable');
+    enquiryEndpoint = endpoint;
+    formToken = result.token;
+    // Match the signed token's minimum age without storing anything on the device.
+    await new Promise(resolve => setTimeout(resolve, 3100));
+    backendReady = true;
+    document.querySelectorAll('[data-enquiry-unavailable]').forEach(element => { element.hidden = true; });
+    showEnquiryStatus('Your quote is free and without obligation.');
+    updateSubmitState();
+  } catch {
+    showEnquiryStatus('Online enquiries are unavailable right now. Please contact John directly.', true);
+  }
+}
+async function handleEnquirySubmission(event) {
   event.preventDefault();
-  if (!validateEnquiry()) return;
-  // Deliberately do not transmit, persist, clear fields or display a success state.
-  enquiryStatus.setAttribute('aria-live', 'polite');
+  if (sendingEnquiry || enquiryAccepted || enquiryBlocked) return;
+  if (!validateEnquiry() || !backendReady || !enquiryEndpoint) return;
+  const data = collectEnquiryData();
+  const body = new FormData();
+  for (const [key, value] of Object.entries(data)) {
+    if (key === 'photos') value.forEach(file => body.append('photos[]', file, file.name));
+    else body.append(key, value);
+  }
+  body.append('token', formToken);
+  body.append('website', quoteForm.querySelector('[name="website"]').value);
+  sendingEnquiry = true;
+  const controls = [...quoteForm.querySelectorAll('input,select,textarea,button')];
+  const disabledStates = controls.map(control => control.disabled);
+  controls.forEach(control => { control.disabled = true; });
+  quoteForm.setAttribute('aria-busy', 'true');
+  submitEnquiryButton.textContent = 'Sending…';
+  showEnquiryStatus('Sending your enquiry. Please keep this page open.');
+  try {
+    const response = await fetch(enquiryEndpoint, {method:'POST', body, credentials:'omit', redirect:'error', signal:AbortSignal.timeout(30000)});
+    const result = await response.json();
+    if (response.ok && result.ok === true && result.code === 'accepted') {
+      enquiryAccepted = true;
+      showEnquiryStatus('Your enquiry has been sent. John will be in touch.');
+      photoStatus.textContent = selectedPhotos.length ? `${selectedPhotos.length} photo${selectedPhotos.length === 1 ? '' : 's'} included with your enquiry.` : 'No photos attached.';
+      submitEnquiryButton.textContent = 'Enquiry sent';
+      enquiryStatus.setAttribute('tabindex', '-1');
+      enquiryStatus.focus();
+    } else {
+      // Never render raw backend/provider messages as HTML.
+      if (response.status === 422 && result.errors && typeof result.errors === 'object') {
+        for (const field of enquiryFields) {
+          if (typeof result.errors[field.name] !== 'string') continue;
+          const message = document.querySelector(`#${field.id}-error`);
+          message.textContent = result.errors[field.name]; message.hidden = false;
+          field.setAttribute('aria-invalid', 'true');
+        }
+        if (typeof result.errors.photos === 'string') showPhotoError(result.errors.photos);
+      }
+      if (response.status === 409 || response.status >= 500 || (response.ok && result.code !== 'accepted')) deliveryUncertain = true;
+      if (result.code === 'changed_request' || (result.code === 'verification_failed' && deliveryUncertain)) enquiryBlocked = true;
+      const messages = {422:'Please check the form details. If verification failed, refresh the form before trying again.', 413:'Please reduce the size or number of your photos.', 429:'Too many attempts. Please wait ten minutes before trying again.', 409:'A previous attempt may still be processing. Wait 30 seconds and retry without changing your enquiry.'};
+      showEnquiryStatus(enquiryBlocked ? 'An earlier attempt may have been received. Please contact John before sending another enquiry.' : messages[response.status] || 'Delivery could not be confirmed. Retry after 30 seconds without changing your enquiry, or contact John.', true);
+    }
+  } catch {
+    deliveryUncertain = true;
+    showEnquiryStatus('Delivery could not be confirmed. Keep your details and retry after 30 seconds without changing your enquiry, or contact John.', true);
+  } finally {
+    sendingEnquiry = false;
+    quoteForm.setAttribute('aria-busy', 'false');
+    controls.forEach((control, i) => { control.disabled = enquiryAccepted ? true : disabledStates[i]; });
+    if (!enquiryAccepted) submitEnquiryButton.textContent = enquiryBlocked ? 'Please contact John' : 'Request a free quote';
+    updateSubmitState();
+    if (!enquiryAccepted) {
+      const invalid = quoteForm.querySelector('[aria-invalid="true"]');
+      if (invalid) invalid.focus();
+    }
+  }
 }
 quoteForm.addEventListener('submit', handleEnquirySubmission);
 quoteForm.addEventListener('keydown', event => {
@@ -104,7 +195,7 @@ descriptionField.addEventListener('input', () => {
 document.querySelectorAll('a[href="#enquiry-form"]').forEach(link => {
   link.addEventListener('click', () => {
     const category = link.dataset.jobCategory;
-    if (category) {
+    if (category && !sendingEnquiry && !enquiryAccepted && !enquiryBlocked) {
       const select = document.querySelector('#category');
       select.value = category;
       validateEnquiryField(select);
@@ -152,7 +243,7 @@ function renderPhotos() {
     photoPreviews.append(item);
   }
   const bytes = selectedPhotos.reduce((sum, photo) => sum + photo.file.size, 0);
-  photoStatus.textContent = photosProcessing ? 'Preparing photos on your device…' : selectedPhotos.length ? `${selectedPhotos.length} of 5 photos selected · ${(bytes / 1_000_000).toFixed(2)} MB total. Not uploaded yet.` : 'No photos selected.';
+  photoStatus.textContent = photosProcessing ? 'Preparing photos on your device…' : selectedPhotos.length ? `${selectedPhotos.length} of 5 photos selected · ${(bytes / 1_000_000).toFixed(2)} MB total. Selected on this device.` : 'No photos selected.';
 }
 async function compressPhoto(file) {
   if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) throw new Error('Please choose JPG, PNG or WebP photos. Convert HEIC photos to JPG first.');
@@ -199,6 +290,7 @@ photoInput.addEventListener('change', async () => {
   photosProcessing = true;
   photoInput.disabled = true;
   photoInput.setAttribute('aria-busy', 'true');
+  updateSubmitState();
   renderPhotos();
   const prepared = [];
   try {
@@ -215,6 +307,9 @@ photoInput.addEventListener('change', async () => {
     photosProcessing = false;
     photoInput.disabled = false;
     photoInput.setAttribute('aria-busy', 'false');
+    updateSubmitState();
     renderPhotos();
   }
 });
+
+prepareEnquiryBackend();

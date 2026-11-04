@@ -3,3 +3,6 @@ node_modules/
 
 # Generated email previews belong outside the published site.
 /email-preview.html
+/resend-config.php
+/johnsjobs-state/
+/johnsjobs-deployment/

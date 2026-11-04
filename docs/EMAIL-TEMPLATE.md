@@ -1,6 +1,6 @@
 # Enquiry email presentation
 
-Implemented 4 November 2026. Presentation only; no Resend SDK, key, API call or submission activation.
+Implemented 4 November 2026. The reusable JS renderer remains presentation-only. A matching PHP renderer and private cURL integration are now prepared; no production key, deployment or live submission activation has taken place.
 
 ## Renderer
 
@@ -37,3 +37,6 @@ Open generated HTML locally or inspect it in a local development browser. It is 
 6. Call Resend only once the backend is implemented, with the duplicate/time-out handling in the integration contract. Return genuine provider-acceptance success or a safe error; preserve customer data on failure. Test actual delivery/bounces before activation.
 
 `npm test` covers escaping, line breaks, header injection, malformed inputs, attachment/no-photo variants, configuration isolation, category parity and absence of active/external HTML content. `npm run check` checks syntax. Local Chromium layout checks are useful but do not establish real Gmail/Outlook/mobile-email rendering; inbox/client tests remain required when the backend is available. The public form stays disabled.
+
+## PHP implementation available
+`_php/private/renderer.php` ports this presentation. Its fictional fixture output was checked byte-for-byte against the JS renderer for HTML, plain text and subject. The PHP service attaches validated file bytes separately. Use `PHP-DEPLOYMENT.md` rather than the earlier future-backend instructions when deploying the confirmed PHP host. Actual mail-client/inbox tests still require an authorised delivery test.

@@ -4,7 +4,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 const root=path.resolve(fileURLToPath(new URL('..',import.meta.url))); 
 const args=process.argv.slice(2);
-if(args.length!==2)throw new Error('Usage: npm run seo:production -- https://johnsjobs.uk /tmp/johnsjobs-production');
+if(args.length!==2 && !(args.length===3 && args[2]==='--enable-enquiries'))throw new Error('Usage: npm run seo:production -- https://johnsjobs.uk /tmp/johnsjobs-production [--enable-enquiries]');
 const origin=new URL(args[0]);
 if(origin.protocol!=='https:' || !['johnsjobs.uk','www.johnsjobs.uk'].includes(origin.hostname) || origin.port || origin.pathname!=='/' || origin.search || origin.hash || origin.username || origin.password)throw new Error('Use the confirmed HTTPS production origin only.');
 const output=path.resolve(args[1]);
@@ -17,6 +17,10 @@ for(const filename of ['index.html','privacy.html']){
  let html=await readFile(path.join(root,filename),'utf8');
  const canonical=base+(filename==='index.html'?'/':'/privacy.html');
  if(filename==='index.html'){
+  if(args[2]==='--enable-enquiries'){
+   html=html.replace('id="quote-form"','id="quote-form" data-endpoint="./api/enquiry.php"');
+   html=html.replace('When online enquiries open, we’ll use','We’ll use').replace(' Nothing entered here is sent while submission is disabled.','');
+  }
   html=html.replace('<meta name="robots" content="noindex,follow">','<meta name="robots" content="index,follow">');
   html=html.replace(/<script type="application\/ld\+json">(.*?)<\/script>/s,(_,json)=>{
    const data=JSON.parse(json);data.url=base+'/';data['@id']=base+'/#organization';data.logo=base+'/assets/logo-232.webp';

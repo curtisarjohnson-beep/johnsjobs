@@ -15,7 +15,7 @@ Reviewed: 4 November 2026. Scope: all tracked application HTML, CSS, JavaScript,
 
 ## Not found
 
-No application cookies (`document.cookie` or server `Set-Cookie`), localStorage/sessionStorage, IndexedDB, service workers, Google Analytics, Tag Manager, Meta Pixel, advertising SDKs, tracking pixels, embedded frames/maps/videos, third-party scripts, CAPTCHAs or anti-spam libraries were found. `package.json` has no dependencies or install scripts. `app.js` has no fetch/XHR/beacon/WebSocket network submission. The photo canvas is for resizing requested photos, not a fingerprinting routine. Google Fonts is linked as a stylesheet in each page head; there are no external JavaScript imports. The static server implements no enquiry route.
+No application cookies (`document.cookie` or server `Set-Cookie`), localStorage/sessionStorage, IndexedDB, service workers, Google Analytics, Tag Manager, Meta Pixel, advertising SDKs, tracking pixels, embedded frames/maps/videos, third-party scripts, CAPTCHAs or third-party anti-spam libraries were found. `package.json` has no dependencies or install scripts. `app.js` now contains opt-in same-origin PHP readiness/submission fetches; the demo has no endpoint opt-in and sends no enquiry requests. There are no tracker/beacon requests. The photo canvas is for resizing requested photos, not a fingerprinting routine. Google Fonts is linked as a stylesheet in each page head; there are no external JavaScript imports. The Node static server implements no enquiry route; a separate production PHP endpoint is prepared but not deployed. Its signed tokens and honeypot use page memory only, and rate/idempotency state is stored privately on the server as keyed hashes rather than cookies or raw customer data.
 
 ## Decision for the current site
 
@@ -32,3 +32,6 @@ Do not add a cookie banner. No consent-requiring application storage or tracker 
 ## Reproduction
 
 Search all runtime files and the manifest for cookie/storage APIs, network APIs, external URLs, iframes and external scripts. Inspect each match rather than treating a keyword as evidence of tracking. Check computed font fallbacks and browser requests/storage; photo blob URL requests are local and must not be mistaken for uploads. Repeat the deployed-site audit after the hosting move or any new dependency.
+
+## PHP integration preparation update
+The production PHP preparation adds no browser cookie, local/session storage, external script or tracking widget. The opt-in form sends validated enquiry data/photos to its same-origin backend when enabled. Server-side rate/spam/idempotency controls and their retention require the documented privacy/hosting review before launch. Resend transport is backend-only. No production connection or live email was tested.

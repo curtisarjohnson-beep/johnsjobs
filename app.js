@@ -12,7 +12,7 @@ toggle.addEventListener('click', () => {
   navigation.classList.toggle('open', open);
 });
 navigation.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
-document.addEventListener('keydown', event => { if (event.key === 'Escape') { closeMenu(); toggle.focus(); } });
+document.addEventListener('keydown', event => { if (event.key === 'Escape' && navigation.classList.contains('open')) { closeMenu(); toggle.focus(); } });
 window.matchMedia('(min-width: 1101px)').addEventListener('change', closeMenu);
 document.querySelector('#year').textContent = new Date().getFullYear();
 
@@ -115,7 +115,7 @@ document.querySelectorAll('a[href="#enquiry-form"]').forEach(link => {
 
 
 // Local-only photo preparation. Re-enforce every limit in the future backend.
-const PHOTO_LIMITS = Object.freeze({count:5, sourceBytes:10_000_000, outputBytes:1_000_000, totalBytes:5_000_000, longestEdge:1600});
+const PHOTO_LIMITS = Object.freeze({count:5, sourceBytes:5_000_000, outputBytes:1_000_000, totalBytes:5_000_000, longestEdge:1600});
 const photoInput = document.querySelector('#photos');
 const photoError = document.querySelector('#photos-error');
 const photoStatus = document.querySelector('#photos-status');
@@ -156,7 +156,7 @@ function renderPhotos() {
 }
 async function compressPhoto(file) {
   if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) throw new Error('Please choose JPG, PNG or WebP photos. Convert HEIC photos to JPG first.');
-  if (file.size > PHOTO_LIMITS.sourceBytes) throw new Error(`${file.name} is over 10 MB. Please choose a smaller photo.`);
+  if (file.size > PHOTO_LIMITS.sourceBytes) throw new Error(`${file.name} is over 5 MB. Please choose a smaller photo.`);
   const url = URL.createObjectURL(file);
   const image = new Image();
   try {

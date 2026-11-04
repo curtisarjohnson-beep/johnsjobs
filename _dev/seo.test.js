@@ -14,7 +14,7 @@ test('demo remains noindex without a canonical or production sitemap declaration
 });
 test('structured data uses only confirmed details and omits rating/address claims',async()=>{
  const html=await read('index.html');const data=JSON.parse(html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1]);
- assert.equal(data.name,'JohnsJobs');assert.equal(data.telephone,'+447772591409');assert.equal(data.areaServed.length,5);
+ assert.equal(data.name,'JOHNSJOBS LTD');assert.equal(data.legalName,'JOHNSJOBS LTD');assert.equal(data.alternateName,'JohnsJobs');assert.deepEqual(data.sameAs,['https://www.facebook.com/JohnsJobsWasteClearances/','https://www.instagram.com/johnsjobswasteclearances/']);assert.equal(data.telephone,'+447772591409');assert.equal(data.areaServed.length,5);
  for(const field of ['aggregateRating','review','address','openingHours','url','@id'])assert.equal(data[field],undefined);
 });
 test('font families stay identical and responsive assets retain dimensions/lazy loading',async()=>{

@@ -171,3 +171,5 @@
 /* A slightly deeper brand red gives small white text sufficient contrast. */
 .contact,.button{background:#e51c24}
 .button.light{background:white}
+
+.footer-links{align-items:center}.footer-socials{display:inline-flex;gap:8px;align-items:center}.footer-socials a{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid var(--line);border-radius:50%;color:var(--ink)}.footer-socials a:hover{color:var(--red);border-color:var(--red)}.footer-socials svg{flex-shrink:0}

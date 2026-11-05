@@ -177,3 +177,5 @@
 .google-profile-link{text-align:center;margin:28px 0 0}
 
 .enquiry-trap{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;pointer-events:none}
+
+.google-rating{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 10px;font-size:13px;font-weight:600;margin-bottom:10px}.google-rating-stars{color:#b97800;letter-spacing:2px;font-size:17px}

@@ -16,12 +16,12 @@ const base=origin.origin;
 for(const filename of ['index.html','privacy.html']){
  let html=await readFile(path.join(root,filename),'utf8');
  const canonical=base+(filename==='index.html'?'/':'/privacy.html');
+ html=html.replace('<meta name="robots" content="noindex,follow">','<meta name="robots" content="index,follow">');
  if(filename==='index.html'){
   if(args[2]==='--enable-enquiries'){
    html=html.replace('id="quote-form"','id="quote-form" data-endpoint="./api/enquiry.php"');
    html=html.replace('When online enquiries open, we’ll use','We’ll use').replace(' Nothing entered here is sent while submission is disabled.','');
   }
-  html=html.replace('<meta name="robots" content="noindex,follow">','<meta name="robots" content="index,follow">');
   html=html.replace(/<script type="application\/ld\+json">(.*?)<\/script>/s,(_,json)=>{
    const data=JSON.parse(json);data.url=base+'/';data['@id']=base+'/#organization';data.logo=base+'/assets/logo-232.webp';
    return '<script type="application/ld+json">'+JSON.stringify(data)+'</script>';
@@ -33,6 +33,6 @@ for(const filename of ['index.html','privacy.html']){
 }
 for(const filename of ['styles.css','app.js','assets/logo-116.webp','assets/logo-232.webp','assets/team-768.webp','assets/team-1024.webp','assets/team-1536.webp'])await copyFile(path.join(root,filename),path.join(output,filename));
 await writeFile(path.join(output,'robots.txt'),`User-agent: *\nDisallow:\nSitemap: ${base}/sitemap.xml\n`);
-// Draft privacy page deliberately remains noindex and is omitted from sitemap.
-await writeFile(path.join(output,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${base}/</loc></url></urlset>\n`);
+// Both existing production pages are indexable; the demo source stays noindex.
+await writeFile(path.join(output,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${base}/</loc></url><url><loc>${base}/privacy.html</loc></url></urlset>\n`);
 console.log(`Production artifacts prepared in ${output}. NOT deployed. Confirm migration checks before uploading.`);

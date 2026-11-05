@@ -29,8 +29,9 @@ test('production artifacts are separate, canonicalised and safe to publish witho
   const html=await readFile(path.join(temp,'index.html'),'utf8');
   assert.match(html,/<meta name="robots" content="index,follow">/);assert.match(html,/<link rel="canonical" href="https:\/\/johnsjobs.uk\/">/);
   const data=JSON.parse(html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1]);assert.equal(data.url,'https://johnsjobs.uk/');
-  assert.match(await readFile(path.join(temp,'privacy.html'),'utf8'),/noindex,follow/);
-  assert.equal((await readFile(path.join(temp,'sitemap.xml'),'utf8')).includes('privacy.html'),false);
+  assert.match(await readFile(path.join(temp,'privacy.html'),'utf8'),/<meta name="robots" content="index,follow">/);
+  assert.match(await readFile(path.join(temp,'privacy.html'),'utf8'),/<link rel="canonical" href="https:\/\/johnsjobs.uk\/privacy.html">/);
+  assert.equal((await readFile(path.join(temp,'sitemap.xml'),'utf8')).includes('privacy.html'),true);
   assert.match(await readFile(path.join(temp,'robots.txt'),'utf8'),/Sitemap: https:\/\/johnsjobs.uk\/sitemap.xml/);
   assert.throws(()=>execFileSync(process.execPath,[new URL('_dev/prepare-production.js',root).pathname,'https://example.com',temp],{stdio:'pipe'}));
   assert.throws(()=>execFileSync(process.execPath,[new URL('_dev/prepare-production.js',root).pathname,'https://johnsjobs.uk',new URL('.',root).pathname],{stdio:'pipe'}));
